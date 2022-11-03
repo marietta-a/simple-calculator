@@ -19,7 +19,50 @@ code {
  .row{
   margin: 20px;
  }
- .button{
-  border-radius: 5px;
-  max-width: 100px;
+ .button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  background-color: black;
+  color: white;
+ }
+ .button-mid{
+  margin-left: 1px;
+  margin-right: 1px;
+}
+.button-left {
+  margin-left: 12px;
+}
+.button-top {
+  margin-top: 12px;
+}
+.button-top {
+  margin-top: 12px;
+}
+.button-right {
+  margin-right: 12px;
+}
+.button-buttom {
+  margin-bottom: 12px;
+}
+.screen {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  justify-content: center;
+  background-color: mintcream;
+  color: black;
+  font-weight: bold;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.display {
+  display: flex;
+  justify-content: center;
+  margin-left: 25%;
+  margin-right: 25%;
+  background-color: mintcream;
+  color: black;
+  font-weight: bold;
+  font-family: Verdana, Geneva, Tahoma, sans-serif
 }
