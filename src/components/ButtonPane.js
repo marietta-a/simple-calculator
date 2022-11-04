@@ -1,5 +1,5 @@
 
-import React,{ useState } from 'react';
+import React from 'react';
 
 class ButtonPane extends React.Component {
 
@@ -29,6 +29,9 @@ class ButtonPane extends React.Component {
   }
 
   handleCommand (cmd) {
+    if(this.state.leftVal === undefined || this.state.leftVal === null){
+      return;
+    }
     this.setState({commandClicked: true})
     this.setState({screenVal: this.state.screenVal + '' + cmd});
     this.setState({command: cmd, rightVal: ''});
@@ -38,6 +41,7 @@ class ButtonPane extends React.Component {
     const right =  parseFloat(this.state.rightVal);
     const left = this.state.result ?  parseFloat(this.state.result) : parseFloat(this.state.leftVal);
     
+    console.log('right: ' + right);
     if(!right && left){
         this.setState({result: left});
         return;
@@ -71,6 +75,11 @@ class ButtonPane extends React.Component {
     this.setState({result: res.toFixed(2)});
   }
 
+  handleEqualityClicked(){
+    this.processResult()
+    this.setState({screen: '', leftVal: '', rightVal: ''});
+  }
+
   render() {
     return(
         <div className="flex content-center justify-center bg-emerald-900">
@@ -99,7 +108,7 @@ class ButtonPane extends React.Component {
 
               <div className='col-span-2 h-16 button button-left button-buttom ' onClick={() => this.handleClick(0)}>0</div>
               <div className='col-span-1 button button-buttom' onClick={() => this.handleClick('.')}>.</div>
-              <div className='col-span-1 button button-right button-buttom' onClick={() => this.processResult()}>=</div>
+              <div className='col-span-1 button button-right button-buttom' onClick={() => this.handleEqualityClicked()}>=</div>
         </div>
     </div>
     );
