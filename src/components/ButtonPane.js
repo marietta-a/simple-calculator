@@ -1,83 +1,85 @@
 
 import React from 'react';
+import { screen } from '@testing-library/react';
 
 class ButtonPane extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-        result: 0,
+        result: '',
         screenVal: '',
         commandClicked: false,
-        leftVal: '',
-        rightVal: '',
+        val: '',
         command: '',
     };
   }
     
   handleClick(val) {
      this.setState({screenVal: this.state.screenVal + '' + val});
-     if(this.state.commandClicked) {
-          this.setState({rightVal: this.state.rightVal + val}, () => this.processResult());
+     if(this.state.commandClicked){
+        this.setState({commandClicked: false, val: val});
      }
-     else {
-        this.setState({leftVal: this.state.leftVal + val});
+     else{
+      this.setState({val: this.state.val + val});
      }
   }
   handleClearScreen() {
-    this.setState({screenVal: '',leftVal: '', commandClicked: false, rightVal: '', result: 0});
+    this.setState({screenVal: '',val: '', commandClicked: false, result: 0});
   }
 
   handleCommand (cmd) {
-    if(this.state.leftVal === undefined || this.state.leftVal === null){
+    if(this.state.val === undefined || this.state.val === null){
       return;
     }
-    this.setState({commandClicked: true})
-    this.setState({screenVal: this.state.screenVal + '' + cmd});
-    this.setState({command: cmd, rightVal: ''});
+    if(this.state.result === ''){
+      this.setState({result: this.state.val, command: cmd, commandClicked: true});
+      this.setState({screenVal: this.state.screenVal + '' + cmd});
+    }
+    else{
+      this.setState({commandClicked: true,command: cmd });
+      //this.setState({screenVal: this.state.screenVal + '' + cmd});
+      //this.setState({command: cmd, result: this.processResult(cmd)});
+      this.processResult(cmd);
+    }
+
   }
 
-  processResult(){
-    const right =  parseFloat(this.state.rightVal);
-    const left = this.state.result ?  parseFloat(this.state.result) : parseFloat(this.state.leftVal);
+  processResult(cmd){
+    let left = parseFloat(this.state.val);
+    let res = parseFloat(this.state.result);
     
-    console.log('right: ' + right);
-    if(!right && left){
-        this.setState({result: left});
-        return;
-    }
-    if(!right && !left){
-        this.setState({result: 0});
-        return;
-    }
-    var res = 0;
-    
+    let total = 0;
+    var command = this.state.commandClicked ? this.state.command : cmd;
+    console.log(left);
     switch (this.state.command) {
       case '-':
-           res = left - right;
+           total = res ? res - left : 0 - left;
           break;
       case '+':
-           res = left + right;
+           total = res ? res + left : left;
           break;
       case '*':
-           res = left * right;
+           total = res ? res * left : left;
           break;
       case '/':
-           res = left / right;
+           total = res ? res / left : left;
           break;
       case '%':
-           res = left % right;
+           total =  res ? res % left : left;
           break;
     
       default:
           break;
     }
-    this.setState({result: res.toFixed(2)});
+    
+    //return  total.toFixed(2);
+    this.setState({result: total.toFixed(2), screenVal: total.toFixed(2) + ' ' + cmd})
   }
 
   handleEqualityClicked(){
-    this.processResult()
-    this.setState({screen: '', leftVal: '', rightVal: ''});
+    this.processResult(this.state.command);
+    //this.setState({screen: '', val: ''});
   }
 
   render() {
