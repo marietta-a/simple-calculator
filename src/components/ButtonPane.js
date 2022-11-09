@@ -12,17 +12,22 @@ class ButtonPane extends React.Component {
         commandClicked: false,
         val: '',
         command: '',
+        shouldProcessResult: true
     };
   }
     
   handleClick(val) {
-     this.setState({screenVal: this.state.screenVal + '' + val});
+    if(!this.state.shouldProcessResult && !this.state.commandClicked){
+      this.setState({shouldProcessResult: true, screenVal: val, val: val, result: ''})
+      return;
+    }
      if(this.state.commandClicked){
         this.setState({commandClicked: false, val: val});
      }
      else{
-      this.setState({val: this.state.val + val});
+      this.setState({val: this.state.val + '' + val});
      }
+     this.setState({screenVal: this.state.screenVal + '' + val});
   }
   handleClearScreen() {
     this.setState({screenVal: '',val: '', commandClicked: false, result: 0});
@@ -32,15 +37,19 @@ class ButtonPane extends React.Component {
     if(this.state.val === undefined || this.state.val === null){
       return;
     }
+    if(!this.state.shouldProcessResult){
+      this.setState({command: cmd, commandClicked: true,shouldProcessResult: true});
+      this.setState({screenVal: this.state.screenVal + '' + cmd});
+      return;
+    }
     if(this.state.result === ''){
       this.setState({result: this.state.val, command: cmd, commandClicked: true});
       this.setState({screenVal: this.state.screenVal + '' + cmd});
     }
     else{
       this.setState({commandClicked: true,command: cmd });
-      //this.setState({screenVal: this.state.screenVal + '' + cmd});
-      //this.setState({command: cmd, result: this.processResult(cmd)});
-      this.processResult(cmd);
+      var result = this.processResult(cmd);
+      this.setState({result: result, screenVal: result + ' ' + cmd})
     }
 
   }
@@ -50,8 +59,6 @@ class ButtonPane extends React.Component {
     let res = parseFloat(this.state.result);
     
     let total = 0;
-    var command = this.state.commandClicked ? this.state.command : cmd;
-    console.log(left);
     switch (this.state.command) {
       case '-':
            total = res ? res - left : 0 - left;
@@ -73,13 +80,12 @@ class ButtonPane extends React.Component {
           break;
     }
     
-    //return  total.toFixed(2);
-    this.setState({result: total.toFixed(2), screenVal: total.toFixed(2) + ' ' + cmd})
+    return  total;
   }
 
   handleEqualityClicked(){
-    this.processResult(this.state.command);
-    //this.setState({screen: '', val: ''});
+    var result = this.processResult(this.state.command);
+    this.setState({result: result, screenVal: result, shouldProcessResult: false, commandClicked: false, val: 0});
   }
 
   render() {
