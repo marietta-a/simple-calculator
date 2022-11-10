@@ -16,10 +16,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
- .row{
-  margin: 20px;
- }
+  .main{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
+  .calculator {
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+  }
+ /* .row{
+  margin: 0px;
+ } */
  .button {
   display: flex;
   justify-content: center;
@@ -59,6 +69,8 @@ code {
 }
 .display {
   display: flex;
+  position: relative;
+  width: auto;
   justify-content: center;
   margin-left: 25%;
   margin-right: 25%;

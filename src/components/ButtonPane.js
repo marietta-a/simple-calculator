@@ -90,8 +90,8 @@ class ButtonPane extends React.Component {
 
   render() {
     return(
-        <div className="flex content-center justify-center bg-emerald-900">
-        <div className="grid grid-cols-4 gap-1 w-1/5 rounded-md mt-16 mb-16 bg-gray-400">
+        <div className="main bg-emerald-900">
+        <div className="calculator grid grid-cols-4 gap-1 w-1/5 rounded-md mt-16 mb-16 bg-gray-400">
               <div className='col-span-4 screen button-left button-right button-top'>{this.state.screenVal}</div>
               <div className='col-span-4 display button-right button-bottom'>{this.state.result}</div>
               <div className='col-span-1 h-16 button button-left button-top' onClick={() => this.handleClearScreen()}>AC</div>
