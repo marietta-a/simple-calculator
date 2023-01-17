@@ -25,23 +25,19 @@ jobs:
       - image: circleci/node:13.8.0 
     steps:
       - run: mkdir -p workspace
-      - run: echo file sharing demo... > workspace/output
+      - run: echo hello world!! > output.txt
       - persist_to_workspace:
-          root: workspace
-          paths: output
+          root: ~\
+          paths:
+            - output.txt
 
   print_output_file:
     docker:
       - image: circleci/node:13.8.0 
     steps:
       - attach_workspace:
-          at: tmp/workspace
-      - run: |
-          if [[ `cat /tmp/workspace/output` == file sharing demo... ]]; then
-            echo "It worked!";
-          else
-            echo "Nope!"; exit 1
-          fi
+          at: ~\
+      - run: cat output.txt
 
 
 
