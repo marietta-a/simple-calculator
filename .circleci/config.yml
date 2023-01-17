@@ -27,17 +27,27 @@ jobs:
       - run:
           name: "Say world"
           command: "echo World"
-    
+
+  print-env:
+      docker:
+        - image:  circleci/node:13.8.0
+      steps:
+        - run: 
+           name: print env var
+           command: echo $my_env 
+
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   say-hello-workflow:
     jobs:
+      - print-env
       - print-hello
       - print-world:
           requires:
             - print-hello
+            - print-env
 
 
 
