@@ -38,7 +38,14 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run: cat ~/output.txt
+      - run: 
+          name: temp cache
+          command: cat ~\\output.txt
+      - when:
+          condition: false
+          steps:
+            - run: echo unable to create cache
+            
 
 
 
