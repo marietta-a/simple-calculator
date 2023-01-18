@@ -38,8 +38,9 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
+      - run: exit 1
       - run: 
-          name: temp cache
+          name: on error
           command: cat ~\\output.txt
           when: on_fail
           #condition: false
