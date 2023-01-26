@@ -5,74 +5,28 @@ version: 2.1
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
-commands:
-  print_pipeline_id:
-    steps:
-      - run: echo ${CIRCLE_WORKFLOW_ID}
+
 jobs:
-  print-pipeline:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+  create_infrastructure: 
     docker:
-      - image: circleci/node:13.8.0
-      #- image: cimg/base:stable
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+      - image: amazon/aws-cli
     steps:
       - checkout
-      - print_pipeline_id
-
-  save_hello_world_output:
-    docker:
-      - image: circleci/node:13.8.0 
-    steps:
-      - run: echo hello world!! > ~/output.txt
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - output.txt
-
-  print_output_file:
-    docker:
-      - image: circleci/node:13.8.0 
-    steps:
-      - attach_workspace:
-          at: ~/
-      - run: exit 1
       - run:
-          name: on error
-          command: echo Hello Error!
-          when: on_fail
-      - run: 
-          name: temp cache
-          command: cat ~\\output.txt
-          #condition: false
-          #steps:
-          #  - run: echo unable to create cache
+          name: Create Cloudformation Stack
+          command: |
+            aws cloudformation deploy \
+              --template-file template.yml \
+              --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} \
+              --region us-east-1
             
-
-
-
-  print-env:
-      docker:
-        - image:  circleci/node:13.8.0
-      steps:
-        - run: 
-           name: print env var
-           command: echo $my_env 
-
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  conf-workflow:
     jobs:
-      - print-env
-      - print-pipeline
-      - save_hello_world_output
-      - print_output_file:
-          requires:
-            - save_hello_world_output
+      - create_infrastructure
 
 
 
