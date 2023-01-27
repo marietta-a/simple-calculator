@@ -33,7 +33,7 @@ jobs:
                   --region us-east-1        
           # Fail the job intentionally to simulate an error.
           # Uncomment the line below if you want to fail the current step
-          # - run: return 1
+          - run: return 1
           - destroy_environment
 
   configure_infrastructure: 
@@ -92,7 +92,7 @@ jobs:
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  conf-workflow:
+  workflow:
     jobs:
       # - configure_infrastructure
       - create_infrastructure
